@@ -8,39 +8,72 @@ using System.Xml.Serialization;
 
 namespace CS_Exam_01_Translator
 {
-    public class EnglishWord
+    public class ForeignWord
     {
-        public string EnglWord; // rename to originalWord or something (target)
-        public List<string> RuTransl;  // translations
-        public EnglishWord() : this("") { }
-        public EnglishWord(string enWord)
+        public string origWord;
+        public List<string> transl;
+        public ForeignWord() : this("") { }
+        public ForeignWord(string word)
         {
-            EnglWord = enWord;
-            RuTransl = new List<string>();
+            origWord = word;
+            transl = new List<string>();
+        }
+        public void PrintTraslation()
+        {
+            Console.WriteLine($"Перевод слова:");
+            foreach (string word in transl) { Console.WriteLine($"\t\t{word}"); }
         }
         public override string ToString()
         {
-            string str = $"Английский:\n\t\"{EnglWord}\"\nРусский:\n";
-            foreach (string ruWord in RuTransl) { str += "\t" + ruWord + "\n"; }
+            string str = $"Английский:\n\t\"{origWord}\"\nРусский:\n";
+            foreach (string word in transl) { str += "\t" + word + "\n"; }
             return str;
         }
     }
 
     class Translator
     {
-        // move from here to main maybe (or menu class)
-        public string fromWhat;
-        public string toWhat;
-        //
-        public List<EnglishWord> Vocabulary;
+        string fileName;
+        public List<string> Dictionaries;
+        public List<ForeignWord> Vocabulary;
         public Translator()
         {
-            XmlSerializer xmlFormat = new XmlSerializer(typeof(List<EnglishWord>));
+            Vocabulary = new List<ForeignWord>();
+        }
+        public void LoadVocabulary(string vocabu)
+        {
+            XmlSerializer xmlFormat = new XmlSerializer(typeof(List<ForeignWord>));
             try
             {
-                using (Stream fStream = File.OpenRead("test.xml"))
+                using (Stream fStream = File.OpenRead($"{vocabu}.xml"))
                 {
-                    Vocabulary = (List<EnglishWord>)xmlFormat.Deserialize(fStream);
+                    Vocabulary = (List<ForeignWord>)xmlFormat.Deserialize(fStream);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+        public int SearchWord(string forWord)
+        {
+            for (int i = 0; i < Vocabulary.Count; i++)
+            {
+                if (forWord.ToLower() == Vocabulary[i].origWord.ToLower())
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+        public void SaveVocabulary()
+        {
+            XmlSerializer xmlFormat = new XmlSerializer(typeof(List<ForeignWord>));
+            try
+            {
+                using (Stream fStream = File.Create($"{fileName}.xml"))
+                {
+                    xmlFormat.Serialize(fStream, Vocabulary);
                 }
             }
             catch (Exception ex)
@@ -54,50 +87,57 @@ namespace CS_Exam_01_Translator
     {
         static void Main(string[] args)
         {
-            EnglishWord apple = new EnglishWord("Apple");
-            apple.RuTransl.Add("Яблоко");
+            int userInput = 0;
+            Console.WriteLine("\tГлавное меню");
+            Console.WriteLine("    Выберите действие:\n");
+            Console.WriteLine("1 - Создать новый словарь");
+            Console.WriteLine("2 - Редактировать существующий словарь");
+            Console.WriteLine("3 - Искать перевод");
+            userInput = Int32.Parse(Console.ReadLine());
 
-            EnglishWord orange = new EnglishWord("Orange");
-            orange.RuTransl.Add("Оранжевый");
-            orange.RuTransl.Add("Апельсин");
-
-            List<EnglishWord> englishWords = new List<EnglishWord> { apple, orange };
-
-            XmlSerializer xmlFormat = new XmlSerializer(typeof(List<EnglishWord>));
-
-            try
+            switch (userInput)
             {
-                /*using (Stream fStream = File.Create("test.xml"))
-                {
-                    xmlFormat.Serialize(fStream, englishWords);
-                }*/
+                case 3:
+                    int dictChoice;
+                    Console.WriteLine("\tПереводчик");
+                    Console.WriteLine("    Выберите словарь:\n");
+                    Console.WriteLine("1 - Англо-Русский");
+                    //Console.WriteLine("2 - Русско-Английский");
+                    dictChoice = Int32.Parse(Console.ReadLine());
 
-                List<EnglishWord> translatorDatabase = null;
-                using (Stream fStream = File.OpenRead("test.xml"))
-                {
-                    translatorDatabase = (List<EnglishWord>)xmlFormat.Deserialize(fStream);
-                }
-
-                string searchedWord = "orange";
-
-                foreach (EnglishWord word in translatorDatabase)
-                {
-                    if (word.EnglWord.ToLower() == searchedWord.ToLower())
+                    switch (dictChoice)
                     {
-                        foreach (string transl in word.RuTransl)
-                        {
-                            Console.WriteLine(transl);
-                        }
+                        case 1:
+                            Translator trans = new Translator();
+                            trans.LoadVocabulary("EN-RU"); // hardcoded name wont allow additional user created dictionaries
+
+                            Console.Write("Введите слово:  ");
+                            string srchWord = Console.ReadLine();
+                            int ind = trans.SearchWord(srchWord);
+                            if (ind != -1)
+                                trans.Vocabulary[ind].PrintTraslation();
+                            else
+                                Console.WriteLine("В словаре нет такого слова");
+
+                            Console.WriteLine("Что дальше?:");
+                            Console.WriteLine("1 - Назад");
+                            Console.WriteLine("2 - Ввести новое слово");
+                            Console.WriteLine("3 - Выгрузить результат в файл");
+                            
+                            break;
+                        default:
+                            break;
                     }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
+
+                    break;
+                default:
+                    break;
             }
 
-            //Console.WriteLine(apple);
-            //Console.WriteLine(orange);
+            //Translator trans = new Translator();
+            //trans.LoadVocabulary("test");
+            //int ind = trans.SearchWord("orange");
+            //trans.Vocabulary[ind].PrintTraslation();
 
             Console.ReadLine();
         }
