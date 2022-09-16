@@ -52,7 +52,7 @@ namespace CS_Exam_01_Translator
     {
         public string FilePath;
         public string[] Dictionaries;
-        public List<ForeignWord> Vocabulary;
+        public List<ForeignWord> Vocabulary;    // FIX IT: Vocabulary doesn't clear, copied into new vocabulary
         public Translator()
         {
             Vocabulary = new List<ForeignWord>();
@@ -128,7 +128,7 @@ namespace CS_Exam_01_Translator
             }
         }
 
-        public void CreateVocabulary(string transName)
+        public void CreateVocabulary(string transName)    // FIX IT: Code repeat with ? or find two another similar functions in Translator
         {
             foreach (string existingTrans in this.Dictionaries)
             {
@@ -405,7 +405,7 @@ namespace CS_Exam_01_Translator
                                             break;
                                         case 1:
                                             break;
-                                        case 2:
+                                        case 2:    // FIX IT: Code almost fully repeated
                                             XmlSerializer xmlFormat = new XmlSerializer(typeof(ForeignWord));
                                             try
                                             {
