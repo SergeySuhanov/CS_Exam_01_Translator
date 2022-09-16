@@ -51,7 +51,7 @@ namespace CS_Exam_01_Translator
     class Translator
     {
         public string FilePath;
-        public string[] Dictionaries;
+        public string[] Dictionaries;           // FIX IT: Add function to show full vocabulary, sort maybe
         public List<ForeignWord> Vocabulary;    // FIX IT: Vocabulary doesn't clear, copied into new vocabulary
         public Translator()
         {
@@ -213,7 +213,7 @@ namespace CS_Exam_01_Translator
                                 {
                                     Console.Clear();
                                     int editChoice; 
-                                    Console.WriteLine("    Что редактировать:\n");
+                                    Console.WriteLine("    Что редактировать:\n");    // FIX IT: Easy to forget chosen vocabulary and further entered words
                                     Console.WriteLine("0 - Выйти в предыдущее меню");
                                     Console.WriteLine("1 - Добавить новое слово");
                                     Console.WriteLine("2 - Редактировать слово или перевод");
@@ -346,6 +346,7 @@ namespace CS_Exam_01_Translator
                                                         }
                                                         else
                                                             Console.WriteLine("Нельзя удалить единственный вариант перевода!");
+                                                        Console.ReadLine();
                                                         break;
                                                     default:
                                                         break;
