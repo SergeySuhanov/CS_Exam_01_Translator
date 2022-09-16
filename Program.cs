@@ -40,12 +40,12 @@ namespace CS_Exam_01_Translator
             }
             Console.WriteLine();
         }
-        public override string ToString()
+        /*public override string ToString()
         {
             string str = $"Английский:\n\t\"{origWord}\"\nРусский:\n";
             foreach (string word in transl) { str += "\t" + word + "\n"; }
             return str;
-        }
+        }*/
     }
 
     class Translator
@@ -167,6 +167,7 @@ namespace CS_Exam_01_Translator
 
             while (true)
             {
+                Console.Clear();
                 int userInput = 0;
                 Console.WriteLine("\tГлавное меню");
                 Console.WriteLine("    Выберите действие:\n");
@@ -179,6 +180,7 @@ namespace CS_Exam_01_Translator
                 switch (userInput)
                 {
                     case 1:    // Create New Vocabulary
+                        Console.Clear();
                         Console.WriteLine("Уже существующие словари:");
                         trans.GetDictionariesList();
                         Console.WriteLine("Укажите тип словаря (пример: Русско-Английский)");
@@ -188,8 +190,9 @@ namespace CS_Exam_01_Translator
                     case 2:    // Edit Vocabulary
                         while (inMenuLvl2)
                         {
+                            Console.Clear();
                             int dictChoice;
-                            Console.WriteLine("\tПереводчик");
+                            Console.WriteLine("\tРедактор словарей");
                             Console.WriteLine("    Выберите словарь:\n");
                             Console.WriteLine("0 - Назад в предыдущее меню");
                             trans.GetDictionariesList();
@@ -208,6 +211,7 @@ namespace CS_Exam_01_Translator
                                 bool inMenuLvl3 = true;
                                 while (inMenuLvl3)
                                 {
+                                    Console.Clear();
                                     int editChoice; 
                                     Console.WriteLine("    Что редактировать:\n");
                                     Console.WriteLine("0 - Выйти в предыдущее меню");
@@ -240,12 +244,12 @@ namespace CS_Exam_01_Translator
                                                 bool enteringNewWord = true;
                                                 while (enteringNewWord)
                                                 {
-                                                    Console.WriteLine("Введите перевод слова:");
+                                                    Console.Write("Введите перевод слова: ");
                                                     string newTransl = Console.ReadLine();
                                                     newWord.AddTranslation(newTransl);
 
                                                     int nextNewWord;
-                                                    Console.WriteLine("Что дальше?:");
+                                                    Console.WriteLine("\n\tЧто дальше?:");
                                                     Console.WriteLine("0 - Назад (+ сохранить изменения)");
                                                     Console.WriteLine("1 - Ввести дополнительный перевод");
                                                     nextNewWord = Int32.Parse(Console.ReadLine());
@@ -266,6 +270,7 @@ namespace CS_Exam_01_Translator
                                             }
                                             break;
                                         case 2:    // Edit Existing Word
+                                            Console.Clear();
                                             Console.Write("Введите слово:  ");
                                             srchWord = Console.ReadLine();
                                             ind = trans.SearchWord(srchWord);
@@ -306,6 +311,7 @@ namespace CS_Exam_01_Translator
                                                 Console.WriteLine("В словаре нет такого слова!");
                                             break;
                                         case 3:    // Delete Word
+                                            Console.Clear();
                                             Console.Write("Введите слово:  ");
                                             srchWord = Console.ReadLine();
                                             ind = trans.SearchWord(srchWord);
@@ -356,6 +362,7 @@ namespace CS_Exam_01_Translator
                     case 3:    // Search Word Translation
                         while (inMenuLvl2)
                         {
+                            Console.Clear();
                             int dictChoice;
                             Console.WriteLine("\tПереводчик");
                             Console.WriteLine("    Выберите словарь:\n");
@@ -376,6 +383,7 @@ namespace CS_Exam_01_Translator
                                 bool inMenuLvl3 = true;
                                 while (inMenuLvl3)
                                 {
+                                    Console.Clear();
                                     Console.Write("Введите слово:  ");
                                     string srchWord = Console.ReadLine();
                                     int ind = trans.SearchWord(srchWord);
